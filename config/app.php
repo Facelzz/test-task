@@ -164,8 +164,9 @@ return [
 
         /*
          * Ide Helper
-         */
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+         *
+         * Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+	 */
 
         /*
          * Datatables
