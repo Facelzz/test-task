@@ -37,23 +37,32 @@ class EmployeeController extends Controller
     {
         if($request->ajax())
         {
-            $data = Employee::latest()->get();
+            $data = Employee::select([
+                'id',
+                'photo',
+                'full_name',
+                'position_id',
+                'employment_date',
+                'phone_number',
+                'email',
+                'salary'
+            ]);
             return datatables()->of($data)
                 ->editColumn('employment_date', function (Employee $employee)
                 {
-                    return date('d.m.y', strtotime($employee->getAttribute('employment_date')));
+                    return date('d.m.y', strtotime($employee->employment_date));
                 })
                 ->editColumn('position_id', function (Employee $employee)
                 {
-                    return $employee->position->getAttribute('name');
+                    return $employee->position->name;
                 })
                 ->editColumn('salary', function(Employee $employee)
                 {
-                    return '$'.number_format($employee->getAttribute('salary'),3,',','.');
+                    return '$'.number_format($employee->salary,3,',','.');
                 })
                 ->editColumn('photo', function (Employee $employee)
                 {
-                    return '<img width="50" height="50" class="rounded-circle" src="'.$employee->getAttribute('photo').'">';
+                    return '<img width="50" height="50" class="rounded-circle" src="'.$employee->photo.'">';
                 })
                 ->addColumn('actions', function (Employee $employee)
                 {
@@ -61,7 +70,7 @@ class EmployeeController extends Controller
                                 <a href="' . route('employee.edit', $employee->id) . '" class="btn p-0">
                                     <i class="fas fa-pencil-alt"></i>
                                 </a>
-                                <button class="delete-modal btn p-0" data-info="'.$employee->id.', '.$employee->getAttribute("full_name").'">
+                                <button class="delete-modal btn p-0" data-info="'.$employee->id.', '.$employee->full_name.'">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>';
@@ -78,7 +87,7 @@ class EmployeeController extends Controller
     public function create()
     {
         $positions = Position::all();
-        $employees = Employee::all();
+        $employees = Employee::select(['full_name', 'position_id']);
         return view('employee.create', compact('positions', 'employees'));
     }
 
@@ -130,7 +139,7 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        $employees = Employee::all();
+        $employees = Employee::select(['full_name', 'position_id']);
         $positions = Position::all();
         $employee['head'] = $employee->head()->getResults()->full_name;
         $employee->employment_date = date('d.m.y', strtotime($employee->employment_date));
