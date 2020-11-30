@@ -122,7 +122,7 @@ class EmployeeController extends Controller
         $data['employment_date'] = date('Y.m.d', strtotime($data['employment_date']));
         $data['admin_updated_id'] = $data['admin_created_id'] = auth()->user()->id;
 
-        $data['photo'] = 'storage/' . $data['photo']->store('uploads', 'public');
+	$data['photo'] = str_replace('public', 'storage', $data['photo']->storePublicly('public/uploads'));
         Image::configure(['driver' => 'gd']);
         Image::make($data['photo'])->encode('jpg', 80)->orientate()->fit(300,300)->save();
 
