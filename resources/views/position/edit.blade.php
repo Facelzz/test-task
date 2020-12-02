@@ -48,7 +48,7 @@
             </div>
 
             <button type="submit" class="btn btn-flat btn-primary float-right w-25 ml-4">Save</button>
-            <button class="btn btn-default btn-flat float-right w-25">Cancel</button>
+            <a class="btn btn-default btn-flat float-right w-25" href="{{ route('position.index') }}">Cancel</a>
         </div>
     </form>
 @stop
